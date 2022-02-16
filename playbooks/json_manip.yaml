@@ -1,0 +1,62 @@
+# Performing JSON manipulations. 
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    namespaces:
+      stdout: |
+        {
+          "apiVersion": "v1",
+          "items": [
+            {
+              "apiVersion": "v1",
+              "kind": "Namespace",
+              "metadata": {
+                "annotations": {
+        "kubectl.kubernetes.io/last-applied-configuration":"{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"labels\":{\"istio-injection\":\"enabled\"},\"name\":\"test-rewards\"}}\n"
+                },
+                "creationTimestamp": "2018-09-25T23:45:37Z",
+                "labels": {
+                  "istio-injection": "enabled"
+                },
+                "name": "test-rewards",
+                "resourceVersion": "7399723",
+                "selfLink": "/api/v1/namespaces/test-rewards",
+                "uid": "1a8e3-c11d-11e8-9986-8acd436f34"
+              },
+              "spec": {
+                "finalizers": [
+                  "kubernetes"
+                ]
+              },
+              "status": {
+                "phase": "Active"
+              }
+            },
+            {
+              "apiVersion": "v1",
+              "kind": "Namespace",
+              "metadata": {
+                "creationTimestamp": "2018-09-26T17:33:42Z",
+                "labels": {
+                  "istio-injection": "enabled"
+                },
+                "name": "inventory",
+                "resourceVersion": "15021",
+                "selfLink": "/api/v1/namespaces/customer-inventory",
+                "uid": "4fd5bfb6-c1b2-11e8-9986-8a3fc36f34"
+              },
+              "spec": {
+                "finalizers": [
+                  "kubernetes"
+                ]
+              },
+              "status": {
+                "phase": "Active"
+              }
+            }
+          ]
+        }
+  tasks:
+    - debug:
+        var: namespaces.stdout|from_json|json_query('items[].metadata.name')
